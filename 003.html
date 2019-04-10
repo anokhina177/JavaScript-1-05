@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Task #3</title>
+</head>
+
+<body>
+    <h2>Заголовок.</h2>
+    <ul id="ul1">
+        <li>list</li>
+        <li>list</li>
+        <li>list</li>
+        <li>list</li>
+    </ul>
+    <button id="button1" onclick="changeList()">Поменять список</button>
+    <button id="button2" onclick="addNewListItem()">Добавить Элемент</button>
+
+    <script>
+        function changeList() {
+            let children = document.getElementById('ul1').children;
+            for (let i = 0; i < children.length; i++) {
+                const element = children[i];
+                element.innerHTML = i;
+            }
+        }
+        function addNewListItem() {
+            let ul = document.getElementById('ul1');
+            let newItem = document.createElement('li');
+            newItem.innerHTML = "Первый элемент списка";
+            ul.insertBefore(newItem, ul.children[0]);
+        }
+    </script>
+</body>
+
+</html>

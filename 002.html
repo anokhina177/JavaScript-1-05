@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Task #2</title>
+</head>
+
+<body>
+    <button id="button1" onclick="changeTag()">Hello</button>
+    <b id="element1">Hello</b>
+    <script>
+        function changeTag() {
+            let tagOld = document.getElementById('element1');
+            let tagNew = document.createElement('h3');
+            tagNew.id = tagOld.id;
+            tagNew.innerHTML = tagOld.innerHTML;
+            tagOld.parentNode.replaceChild(tagNew, tagOld);
+        }
+    </script>
+</body>
+
+</html>
