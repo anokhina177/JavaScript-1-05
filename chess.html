@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chess</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <style>
+        body {
+            padding: 10px;
+        }
+
+        .boardContainer {
+            display: flex;
+            margin: 0 auto; 
+        }
+
+        .board {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-radius: 4px;
+            border: 1px solid grey;
+            padding: 4px;
+        }
+
+        .boardInner {
+            border: 1px solid grey;
+        }
+        .boardInner2{
+            border: 1px solid black;
+        }
+
+        .middle-row {
+            display: flex;
+            flex-direction: row;
+        }
+        .letters-row {
+            display: flex;
+            flex-direction: row;
+            margin-left: 41px;
+            margin-right: 41px;
+        }
+
+        .numbers-col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .letter {
+            width: 60px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .number {
+            width: 40px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .row {
+            display: flex;
+            flex-direction: row;
+        }
+        .cell {
+            width: 60px;
+            height:60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .flipped {
+            -webkit-transform:rotate(-180deg);
+            -moz-transform:rotate(-180deg);
+            -o-transform:rotate(-180deg);
+            transform:rotate(-180deg);
+            ms-filter:"progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
+            filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+        }
+        div.white {
+            background: white;
+        }
+        div.black {
+            background: black;
+        }
+        i.white {
+            color: white;
+        }
+        i.black {
+            color: black;
+        }
+        .figure {
+            font-size: 3em;
+        }
+        
+        .figure:hover {
+            color:grey;
+            cursor: pointer;
+            font-size: 3.3em;            
+        }
+        div.white i.white {
+            -webkit-text-stroke-width: 0.2px;
+            -webkit-text-stroke-color: black;        
+        }
+        div.black i.black {
+            -webkit-text-stroke-width: 0.2px;
+            -webkit-text-stroke-color: white;        
+        }
+
+    </style>
+</head>
+<body onload="setupBoard('boardContainer')">
+    <div id="boardContainer" class="boardContainer"></div>
+    <script>
+        const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
+        const numbers = ["1", "2", "3", "4", "5", "6", "7", "8"];
+        const figuresTypes = {
+            "pawn" : "fa-chess-pawn",
+            "rook" : "fa-chess-rook",
+            "knight" : "fa-chess-knight",
+            "bishop" : "fa-chess-bishop",
+            "queen" : "fa-chess-queen",
+            "king" : "fa-chess-king"
+        };
+        const initialWhitePositions = [
+            {type: "pawn", position : "A2"},
+            {type: "pawn", position : "B2"},
+            {type: "pawn", position : "C2"},
+            {type: "pawn", position : "D2"},
+            {type: "pawn", position : "E2"},
+            {type: "pawn", position : "F2"},
+            {type: "pawn", position : "G2"},
+            {type: "pawn", position : "H2"},
+            {type: "rook", position : "A1"},
+            {type: "knight", position : "B1"},
+            {type: "bishop", position : "C1"},
+            {type: "queen", position : "D1"},
+            {type: "king", position : "E1"},
+            {type: "bishop", position : "F1"},
+            {type: "knight", position : "G1"},
+            {type: "rook", position : "H1"}          
+        ];
+        const initialBlackPositions = [
+            {type: "pawn", position : "A7"},
+            {type: "pawn", position : "B7"},
+            {type: "pawn", position : "C7"},
+            {type: "pawn", position : "D7"},
+            {type: "pawn", position : "E7"},
+            {type: "pawn", position : "F7"},
+            {type: "pawn", position : "G7"},
+            {type: "pawn", position : "H7"},
+            {type: "rook", position : "A8"},
+            {type: "knight", position : "B8"},
+            {type: "bishop", position : "C8"},
+            {type: "queen", position : "D8"},
+            {type: "king", position : "E8"},
+            {type: "bishop", position : "F8"},
+            {type: "knight", position : "G8"},
+            {type: "rook", position : "H8"}          
+        ];
+
+        function setupBoard(containerId) {
+            let container = document.getElementById(containerId);
+            container.appendChild(generateBoard());
+            positionFigures(initialWhitePositions, "white");
+            positionFigures(initialBlackPositions, "black");
+
+        }
+        
+        function positionFigures(figurePositions, color) {
+            figurePositions.forEach(f => {
+                let cell = document.getElementById(f.position);
+                if (cell) {
+                    let fig = document.createElement("i");
+                    fig.className = `fas ${figuresTypes[f.type]} figure ${color}`;
+                    cell.appendChild(fig);
+                }
+            });
+        }
+
+        function addMarkers(markers, upsideDown, reverse, rowClassName, markerClassName) {
+            let row = document.createElement("div");
+            row.className = rowClassName;
+            if (reverse)
+                markers = markers.slice().reverse();
+            markers.forEach(function(x){
+                let cell = document.createElement("div");
+                cell.className=markerClassName;
+                cell.innerText = x;
+                row.appendChild(cell);
+            });
+            
+
+            return row;
+        }
+        
+        function addBoard(){
+            let board = document.createElement("div");
+            board.className="boardInner2";
+            for (let i = 7; i >= 0; i--) {
+                let row = document.createElement("div");
+                row.className ="row"
+                for (let j = 0; j < 8; j++) {
+                    let cell = document.createElement("div");
+                    if ((i+j) % 2 == 1)
+                        cell.className = "cell white";
+                    else
+                        cell.className = "cell black";
+                    cell.id = letters[j] + numbers[i];
+                    row.appendChild(cell);
+                }              
+                board.appendChild(row);
+            }
+
+
+            return board;
+        }
+
+        function generateBoard(){
+            let board = document.createElement("div");
+            board.className = "board";
+            let boardInner = document.createElement("div");
+            boardInner.className = "boardInner";
+
+            boardInner.appendChild(addMarkers(letters, true, false, "letters-row", "letter flipped"));
+            
+            let middleRow = document.createElement("div");
+            middleRow.appendChild(addMarkers(numbers, true, true, "numbers-col", "number"));
+            middleRow.className = "middle-row";
+            middleRow.appendChild(addBoard());
+            middleRow.appendChild(addMarkers(numbers, true, true, "numbers-col", "number flipped"));            
+            
+            boardInner.appendChild(middleRow);
+
+            boardInner.appendChild(addMarkers(letters, false, false, "letters-row", "letter"));            
+            board.appendChild(boardInner);
+
+            return board;
+        }
+    
+    </script>
+</body>
+</html>

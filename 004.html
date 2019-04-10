@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Task #4</title>
+</head>
+
+<body>
+    <input type="text" id="arg1"> <span>?</span> <input type="text" id="arg2"> = <span id="result">результат</span><br>
+    <button id="add" onclick="calculate('+')">+</button>
+    <button id="substract" onclick="calculate('-')">-</button>
+    <button id="multiply" onclick="calculate('*')">*</button>
+    <button id="divide" onclick="calculate('/')">/</button>
+    <script>
+        function calculate(operation) {
+            let arg1 = document.getElementById('arg1').value;
+            let arg2 = document.getElementById('arg2').value;
+            let result = mathOperation(arg1, arg2, operation);
+            document.getElementById('result').innerText = result;
+        }
+        function mathOperation(arg1, arg2, operation) {
+            switch (operation) {
+                case "+":
+                    return +arg1 + +arg2;
+                case "-":
+                    return arg1 - arg2;
+                case "*":
+                    return arg1 * arg2;
+                case "/":
+                    if (!arg2 || arg2 == 0)
+                        return "На ноль делить нельзя!";
+                    else
+                        return arg1 / arg2;
+                    break;
+                default:
+                    return "Неправильное действие!"
+                    break;
+            }
+        }
+    </script>
+</body>
+
+</html>
